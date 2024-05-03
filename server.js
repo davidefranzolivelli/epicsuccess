@@ -22,7 +22,7 @@ app.get("/", (req, res, next) => {
 
 require("./endpoints/utenti.js")(app,connpool)
 // Insert here other API endpoints
-
+require("./endpoints/esperienza.js")(app,connpool)
 // Default response for any other request
 app.use(function(req, res){
     res.status(404);
