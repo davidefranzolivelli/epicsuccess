@@ -15,13 +15,12 @@ function endpoint(app, connpool) {
             return;
         }
         var data = {
-            id: req.body.id,
             testo: req.body.testo,
-            Utenti: req.body.Utenti,
+            utenti: req.body.utenti,
         }
 
-        var sql = 'INSERT INTO esperienza (IDesperienza,testo,Utenti) VALUES (?,?,?)'
-        var params = [data.id, data.testo, data.Utenti]
+        var sql = 'INSERT INTO esperienza (testo,Utenti) VALUES (?,?)';
+        var params = [data.testo, data.utenti];
         connpool.query(sql, params, (error, results) => {
             if (error) {
                 res.status(400).json({ "error": error.message })
@@ -77,7 +76,7 @@ function endpoint(app, connpool) {
         }
         connpool.execute(
             `UPDATE esperienza set 
-               testo = COALESCE(?), 
+               testo = COALESCE(?,testo), 
                WHERE IDesperienza = ?`,
             [data.testo, req.params.id],
             function (err, result) {
