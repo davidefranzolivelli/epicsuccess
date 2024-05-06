@@ -15,11 +15,13 @@ function endpoint(app, connpool) {
             return;
         }
         var data = {
+            id: req.body.id,
             testo: req.body.testo,
+            Utenti: req.body.Utenti,
         }
 
-        var sql = 'INSERT INTO esperienza (testo) VALUES (?)'
-        var params = [data.testo]
+        var sql = 'INSERT INTO esperienza (IDesperienza,testo,Utenti) VALUES (?,?,?)'
+        var params = [data.id, data.testo, data.Utenti]
         connpool.query(sql, params, (error, results) => {
             if (error) {
                 res.status(400).json({ "error": error.message })
