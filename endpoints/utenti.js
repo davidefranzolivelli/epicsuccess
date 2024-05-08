@@ -1,6 +1,6 @@
 function endpoint(app, connpool) {
 
-    app.post("/api/tasks", (req, res) => {
+    app.post("/api/utenti", (req, res) => {
         var errors = []
         /* controllo dati inseriti
         if (!req.body.description) {
@@ -19,7 +19,7 @@ function endpoint(app, connpool) {
             status: req.body.status,
         }
 
-        var sql = 'INSERT INTO task (description, status) VALUES (?,?)'
+        var sql = 'INSERT INTO utenti (username, psw) VALUES (?,?)'
         var params = [data.description, data.status]
         connpool.query(sql, params, (error, results) => {
             if (error) {
@@ -38,8 +38,8 @@ function endpoint(app, connpool) {
 
 
 
-    app.get("/api/tasks", (req, res, next) => {
-        var sql = "select * from task"
+    app.get("/api/utenti", (req, res, next) => {
+        var sql = "select * from utenti"
         var params = []
         connpool.query(sql, params, (err, rows) => {
             if (err) {
@@ -54,8 +54,8 @@ function endpoint(app, connpool) {
     });
 
 
-    app.get("/api/tasks/:id", (req, res) => {
-        var sql = "select * from task where task_id = ?"
+    app.get("/api/utenti/:id", (req, res) => {
+        var sql = "select * from utenti where utenti_id = ?"
         var params = [req.params.id]
         connpool.query(sql, params, (err, rows) => {
             if (err) {
@@ -70,17 +70,17 @@ function endpoint(app, connpool) {
     });
 
 
-    app.put("/api/tasks/:id", (req, res) => {
+    app.put("/api/utenti/:id", (req, res) => {
         var data = {
             description: req.body.description,
             status: req.body.status,
         }
         connpool.execute(
-            `UPDATE task set 
-               description = COALESCE(?,description), 
-               status = COALESCE(?,status) 
-               WHERE task_id = ?`,
-            [data.description, data.status, req.params.id],
+            `UPDATE utenti set 
+               username = COALESCE(?,username), 
+               psw = COALESCE(?,psw) 
+               WHERE utenti_id = ?`,
+            [data.username, data.psw, req.params.id],
             function (err, result) {
                 if (err){
                     res.status(400).json({"error": err.message})
@@ -97,9 +97,9 @@ function endpoint(app, connpool) {
 
 
 
-    app.delete("/api/tasks/:id", (req, res) => {
+    app.delete("/api/utenti/:id", (req, res) => {
         connpool.execute(
-            'DELETE FROM task WHERE task_id = ?',
+            'DELETE FROM utenti WHERE utenti_id = ?',
             [req.params.id],
             function (err, result) {
                 if (err){
