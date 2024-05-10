@@ -15,12 +15,12 @@ function endpoint(app, connpool) {
             return;
         }
         var data = {
-            description: req.body.description,
-            status: req.body.status,
+            username: req.body.username,
+            psw: req.body.psw,
         }
 
         var sql = 'INSERT INTO utenti (username, psw) VALUES (?,?)'
-        var params = [data.description, data.status]
+        var params = [data.username, data.psw]
         connpool.query(sql, params, (error, results) => {
             if (error) {
                 res.status(400).json({ "error": error.message })
@@ -55,7 +55,7 @@ function endpoint(app, connpool) {
 
 
     app.get("/api/utenti/:id", (req, res) => {
-        var sql = "select * from utenti where utenti_id = ?"
+        var sql = "select * from utenti where IDUtenti = ?"
         var params = [req.params.id]
         connpool.query(sql, params, (err, rows) => {
             if (err) {
@@ -72,14 +72,14 @@ function endpoint(app, connpool) {
 
     app.put("/api/utenti/:id", (req, res) => {
         var data = {
-            description: req.body.description,
-            status: req.body.status,
+            username: req.body.username,
+            psw: req.body.psw,
         }
         connpool.execute(
             `UPDATE utenti set 
                username = COALESCE(?,username), 
                psw = COALESCE(?,psw) 
-               WHERE utenti_id = ?`,
+               WHERE IDUtenti = ?`,
             [data.username, data.psw, req.params.id],
             function (err, result) {
                 if (err){
@@ -99,7 +99,7 @@ function endpoint(app, connpool) {
 
     app.delete("/api/utenti/:id", (req, res) => {
         connpool.execute(
-            'DELETE FROM utenti WHERE utenti_id = ?',
+            'DELETE FROM utenti WHERE IDUtenti = ?',
             [req.params.id],
             function (err, result) {
                 if (err){
