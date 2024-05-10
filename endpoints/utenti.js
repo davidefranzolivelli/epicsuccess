@@ -15,12 +15,12 @@ function endpoint(app, connpool) {
             return;
         }
         var data = {
-            username: req.body.username,
+            Username: req.body.Username,
             psw: req.body.psw,
         }
 
-        var sql = 'INSERT INTO utenti (username, psw) VALUES (?,?)'
-        var params = [data.username, data.psw]
+        var sql = 'INSERT INTO utenti (Username, psw) VALUES (?,?)'
+        var params = [data.Username, data.psw]
         connpool.query(sql, params, (error, results) => {
             if (error) {
                 res.status(400).json({ "error": error.message })
@@ -72,7 +72,7 @@ function endpoint(app, connpool) {
 
     app.put("/api/utenti/:id", (req, res) => {
         var data = {
-            username: req.body.username,
+            Username: req.body.Username,
             psw: req.body.psw,
         }
         connpool.execute(
@@ -80,7 +80,7 @@ function endpoint(app, connpool) {
                username = COALESCE(?,username), 
                psw = COALESCE(?,psw) 
                WHERE IDUtenti = ?`,
-            [data.username, data.psw, req.params.id],
+            [data.Username, data.psw, req.params.id],
             function (err, result) {
                 if (err){
                     res.status(400).json({"error": err.message})
