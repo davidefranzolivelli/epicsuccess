@@ -18,7 +18,6 @@ function endpoint(app, connpool) {
             testo: req.body.testo,
             utenti: req.body.utenti,
         }
-
         var sql = 'INSERT INTO esperienza (testo,Utenti) VALUES (?,?)';
         var params = [data.testo, data.utenti];
         connpool.query(sql, params, (error, results) => {
