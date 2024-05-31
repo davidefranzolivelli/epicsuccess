@@ -74,7 +74,7 @@ function endpoint(app, connpool) {
             testo: req.body.testo
         }
         connpool.execute(
-            `UPDATE esperienza set testo = ? WHERE IDesperienza = ?`,
+            `UPDATE esperienza SET testo = COALESCE(testo,?) WHERE IDesperienza = ?`,
             [data.testo, req.params.id],
             function (err, result) {
                 if (err){
